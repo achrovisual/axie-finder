@@ -85,4 +85,13 @@ function create_generic_message(string) {
   return message
 }
 
-module.exports = { delete_element, get_axie_brief_list_query, get_axie_detail_query, set_egg_attributes, set_adult_attributes, create_failed_message, create_generic_message }
+function create_generic_error(string) {
+  const message = new MessageEmbed()
+  .setDescription(string)
+  .setColor('#B33F40')
+
+  return message
+}
+
+
+module.exports = { delete_element, get_axie_brief_list_query, get_axie_detail_query, set_egg_attributes, set_adult_attributes, create_failed_message, create_generic_message, create_generic_error }
