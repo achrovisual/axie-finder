@@ -80,7 +80,7 @@ function create_failed_message() {
 function create_generic_message(string) {
   const message = new MessageEmbed()
   .setDescription(string)
-  .setColor('#0099ff')
+  .setColor('#48A14D')
 
   return message
 }
