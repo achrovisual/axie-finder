@@ -7,10 +7,15 @@ const { create_generic_message } = require('../helpers.js')
 module.exports = {
 	data: new SlashCommandBuilder()
 	.setName('clear')
-	.setDescription('Search for an Axie based on your given criteria.'),
+	.setDescription('Clear all reminders.'),
 	async execute(interaction) {
 		scheduled_search = []
 		await interaction.deferReply();
-		interaction.editReply({ embeds: [create_generic_message('Reminders have been cleared')] })
+		try {
+			interaction.editReply({ embeds: [create_generic_message('Reminders have been cleared.')] })
+		}
+		catch(error) {
+			console.log('An error occured while sending a reply.')
+		}
 	}
 }
