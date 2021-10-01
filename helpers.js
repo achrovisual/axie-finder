@@ -77,4 +77,12 @@ function create_failed_message() {
   return message
 }
 
-module.exports = { delete_element, get_axie_brief_list_query, get_axie_detail_query, set_egg_attributes, set_adult_attributes, create_failed_message }
+function create_generic_message(string) {
+  const message = new MessageEmbed()
+  .setDescription(string)
+  .setColor('#0099ff')
+
+  return message
+}
+
+module.exports = { delete_element, get_axie_brief_list_query, get_axie_detail_query, set_egg_attributes, set_adult_attributes, create_failed_message, create_generic_message }
