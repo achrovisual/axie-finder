@@ -37,15 +37,16 @@ async function search_axie(query, channel) {
   ).then((response) => {
     if(response.data.data.axies.total  <= 0){
       console.log('No Axie was found in scheduled search.')
-      try {
-        channel.send({ embeds: [create_failed_message()] })
-      }
-      catch(error) {
-        console.log('Failed to send reminder to channel.')
-      }
-      finally {
-        return false
-      }
+      return false
+      // try {
+      //   channel.send({ embeds: [create_failed_message()] })
+      // }
+      // catch(error) {
+      //   console.log('Failed to send reminder to channel.')
+      // }
+      // finally {
+      //   return false
+      // }
 
     }
     else {
@@ -151,15 +152,17 @@ async function find_axie_details(data, query, channel) {
       }
     }
     else {
-      try {
-        channel.send({ embeds: [create_failed_message()] })
-      }
-      catch(error) {
-        console.log('Failed to send reminder to channel.')
-      }
-      finally {
-        return false
-      }
+      return false
+
+      // try {
+      //   channel.send({ embeds: [create_failed_message()] })
+      // }
+      // catch(error) {
+      //   console.log('Failed to send reminder to channel.')
+      // }
+      // finally {
+      //   return false
+      // }
     }
   }).catch(error => {
     console.log('An error occured while attempting search.')
