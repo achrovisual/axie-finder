@@ -17,8 +17,9 @@ module.exports = {
 		await interaction.deferReply();
 		if (interaction.options.getInteger('interval') >= 1) {
 			try {
-				console.log('Reminder interval has been changed.')
 				reminder_interval = interaction.options.getInteger('interval')
+				clearTimeout(timeout)
+				console.log('Reminder interval has been changed.')
 				interaction.editReply({ embeds: [create_generic_message('Reminder interval has been set to ' + reminder_interval + (reminder_interval > 1 ? ' minutes.' : ' minute.'))] })
 			}
 			catch(error) {
