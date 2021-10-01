@@ -12,7 +12,7 @@ client.commands = new Collection();
 // Declare variables
 global.scheduled_search = []
 global.target_channel = null
-global.reminder_interval = 1
+global.reminder_interval = 15
 
 const command_files = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
@@ -65,7 +65,7 @@ client.once('ready', () => {
 		}
 
 		// Pause for 6 hours
-		setTimeout(check_for_queries, 3600000 * reminder_interval)
+		setTimeout(check_for_queries, 60000 * reminder_interval)
 	}
 
 	// Start checking for queries
