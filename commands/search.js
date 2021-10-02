@@ -79,8 +79,8 @@ module.exports = {
 			morale: interaction.options.getInteger('morale') == null ? null : [interaction.options.getInteger('morale')],
 			speed: interaction.options.getInteger('speed') == null ? null : [interaction.options.getInteger('speed')],
 			breed_count: interaction.options.getInteger('breed_count') == null ? null : interaction.options.getInteger('breed_count'),
-			pureness: interaction.options.getInteger('pureness') == null ? [6] : [interaction.options.getInteger('pureness')],
-			purity: interaction.options.getInteger('purity') == null ? 50 : interaction.options.getInteger('purity'),
+			pureness: interaction.options.getInteger('pureness') == null ? null : [interaction.options.getInteger('pureness')],
+			purity: interaction.options.getInteger('purity') == null ? 0 : interaction.options.getInteger('purity'),
 			mystic: interaction.options.getInteger('mystic') == null ? null : [interaction.options.getInteger('mystic')],
 			price: interaction.options.getInteger('price') == null ? null : interaction.options.getInteger('price')
 		}
