@@ -4,7 +4,7 @@ const { AxieGene } = require('agp-npm/dist/axie-gene');
 const { MessageEmbed } = require('discord.js');
 
 // Import internal libraries
-const { get_axie_brief_list_query, get_axie_detail_query, set_egg_attributes, set_adult_attributes, create_failed_message } = require('./helpers.js')
+const { get_axie_brief_list_query, get_axie_detail_query, set_egg_attributes, set_adult_attributes, compute_purity, create_failed_message } = require('./helpers.js')
 
 async function search_axie(query, interaction) {
   await axios.post(`https://axieinfinity.com/graphql-server-v2/graphql`,
@@ -29,7 +29,7 @@ async function search_axie(query, interaction) {
           stages: query.stage
         },
         from: 0,
-        size: 1,
+        size: 24,
         sort: "PriceAsc",
         owner: null
       }
@@ -44,6 +44,7 @@ async function search_axie(query, interaction) {
       }
       finally {
         scheduled_search.push(query)
+        console.log('Reminder has been scheduled.')
       }
     }
     else {
@@ -56,104 +57,136 @@ async function search_axie(query, interaction) {
 
 async function find_axie_details(data, query, interaction) {
   temp = data.data.data.axies.results
+  flag = false
 
-  character = {
-    price: null,
-    eth: null,
-    id: temp[0].id,
-    url: temp[0].image,
-    name: temp[0].name,
-    pureness: String(temp[0].pureness),
-    mystic: String(temp[0].numMystic),
-    breed_count: String(temp[0].breedCount),
-    stage: temp[0].stage,
-    class: temp[0].class,
-    hp: null,
-    speed: null,
-    skill: null,
-    morale: null,
-    eyes: null,
-    ears: null,
-    horn: null,
-    mouth: null,
-    back: null,
-    tail: null
-  }
+  for(const temp_character of temp) {
+    // console.log('Checking Axie #' + temp_character.id + '...')
+    if(await axios.post(`https://axieinfinity.com/graphql-server-v2/graphql`,
+      {
+        operationName: "GetAxieDetail",
+        variables: {
+          axieId: temp_character.id
+        },
+        query: get_axie_detail_query()
+      }
+    ).then((response) => {
+      temp = response.data.data.axie
 
-  if(await axios.post(`https://axieinfinity.com/graphql-server-v2/graphql`,
-    {
-      operationName: "GetAxieDetail",
-      variables: {
-        axieId: character.id
-      },
-      query: get_axie_detail_query()
-    }
-  ).then((response) => {
-    temp = response.data.data.axie
-
-    character.price = temp.auction.currentPriceUSD
-    character.eth = temp.auction.currentPrice
-
-    if(query.price >= character.price) {
-      if(character.stage == 1) {
-        try {
-          interaction.editReply({ embeds: [set_egg_attributes(character)] })
+      if(query.price >= temp.auction.currentPriceUSD) {
+        if(temp_character.stage == 1) {
+          // console.log('Match found!')
+          character = {
+            price: temp.auction.currentPriceUSD,
+            eth: temp.auction.currentPrice,
+            id: temp_character.id,
+            url: temp_character.image,
+            name: temp_character.name,
+            pureness: String(temp_character.pureness),
+            mystic: String(temp_character.numMystic),
+            breed_count: String(temp_character.breedCount),
+            stage: temp_character.stage,
+            class: temp_character.class,
+          }
+          try {
+            interaction.editReply({ embeds: [set_egg_attributes(character)] })
+          }
+          catch(error) {
+            console.log('Failed to send message.')
+          }
+          finally {
+            return true
+          }
         }
-        catch(error) {
-          console.log('Failed to send message.')
-        }
-        finally {
-          return true
+        else {
+          genes = temp.genes
+
+          const axie_gene = new AxieGene(genes)
+          genes_readable = axie_gene._genes
+
+          eyes = genes_readable.eyes
+          ears = genes_readable.ears
+          horn = genes_readable.horn
+          mouth = genes_readable.mouth
+          back = genes_readable.back
+          tail = genes_readable.tail
+
+          if(compute_purity({eyes: eyes, ears: ears, horn: horn, mouth: mouth, back: back, tail: tail}, temp_character.class) >= query.purity) {
+            // console.log('Match found!')
+            character = {
+              price: temp.auction.currentPriceUSD,
+              eth: temp.auction.currentPrice,
+              id: temp_character.id,
+              url: temp_character.image,
+              name: temp_character.name,
+              pureness: String(temp_character.pureness),
+              mystic: String(temp_character.numMystic),
+              breed_count: String(temp_character.breedCount),
+              stage: temp_character.stage,
+              class: temp_character.class,
+              hp: null,
+              speed: null,
+              skill: null,
+              morale: null,
+              eyes: null,
+              ears: null,
+              horn: null,
+              mouth: null,
+              back: null,
+              tail: null
+            }
+
+            character.hp = String(temp.stats.hp)
+            character.speed = String(temp.stats.speed)
+            character.skill = String(temp.stats.skill)
+            character.morale = String(temp.stats.morale)
+
+            character.eyes = eyes
+            character.ears = ears
+            character.horn = horn
+            character.mouth = mouth
+            character.back = back
+            character.tail = tail
+
+            try {
+              interaction.editReply({ embeds: [set_adult_attributes(character)] })
+            }
+            catch(error) {
+              console.log('Failed to send message.')
+            }
+            finally {
+              return true
+            }
+          }
         }
       }
       else {
-        character.genes = temp.genes
-        character.hp = String(temp.stats.hp)
-        character.speed = String(temp.stats.speed)
-        character.skill = String(temp.stats.skill)
-        character.morale = String(temp.stats.morale)
 
-        const axie_gene = new AxieGene(character.genes)
-        genes_readable = axie_gene._genes
-
-        character.eyes = genes_readable.eyes
-        character.ears = genes_readable.ears
-        character.horn = genes_readable.horn
-        character.mouth = genes_readable.mouth
-        character.back = genes_readable.back
-        character.tail = genes_readable.tail
-
-        try {
-          interaction.editReply({ embeds: [set_adult_attributes(character)] })
-        }
-        catch(error) {
-          console.log('Failed to send message.')
-        }
-        finally {
-          return true
-        }
       }
+    }).catch(error => {
+      console.log('An error occured while attempting search.')
+      flag = false
+    }))
+    {
+      return true
     }
     else {
-      try {
-        interaction.editReply({ embeds: [create_failed_message()] })
-      }
-      catch(error) {
-        console.log('Failed to send message.')
-      }
-      finally {
-        scheduled_search.push(query)
-        return false
-      }
+      flag = false
     }
-  }).catch(error => {
-    console.log('An error occured while attempting search.')
-    return false
-  })) {
-    return true
   }
-  else {
-    return false
+
+  try {
+    if(!flag) {
+      scheduled_search.push(query)
+      console.log('Reminder has been scheduled.')
+      interaction.editReply({ embeds: [create_failed_message()] })
+    }
+
+  }
+  catch(error) {
+    console.log('Failed to send message.')
+  }
+  finally {
+    return flag
   }
 }
 

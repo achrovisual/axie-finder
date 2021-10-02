@@ -54,7 +54,8 @@ function set_adult_attributes(character) {
     { name: 'Class', value: character.class, inline: true},
     { name: 'Stage', value: character.stage == 1 ? 'Egg' : 'Adult', inline: true},
     { name: 'Breed Count', value: character.breed_count, inline: true},
-    { name: 'Pureness', value: character.pureness, inline: true},
+    // { name: 'Pureness', value: character.pureness, inline: true},
+    { name: 'Purity', value: compute_purity({eyes: character.eyes, ears: character.ears, horn: character.horn, mouth: character.mouth, back: character.back, tail: character.tail}, character.class) + "%", inline: true},
     { name: 'Mystic', value: character.mystic, inline: true},
     { name: 'HP', value: character.hp, inline: true},
     { name: 'Speed', value: character.speed, inline: true},
@@ -66,6 +67,27 @@ function set_adult_attributes(character) {
   )
 
   return message
+}
+
+function compute_purity(traits, cls) {
+  const PROBABILITIES = {d: 0.375, r1: 0.09375, r2: 0.03125};
+  const parts = ["eyes", "ears" ,"horn", "mouth", "back", "tail"];
+  const MAX_QUALITY = 6 * (PROBABILITIES.d + PROBABILITIES.r1 + PROBABILITIES.r2);
+
+  let quality = 0;
+
+  for (let i in parts) {
+      if (string_comparer(traits[parts[i]].d.cls, cls)) {
+          quality += PROBABILITIES.d;
+      }
+      if (string_comparer(traits[parts[i]].r1.cls, cls)) {
+          quality += PROBABILITIES.r1;
+      }
+      if (string_comparer(traits[parts[i]].r2.cls, cls)) {
+          quality += PROBABILITIES.r2;
+      }
+  }
+  return Math.round(quality / MAX_QUALITY * 100)
 }
 
 function create_failed_message() {
@@ -94,4 +116,4 @@ function create_generic_error(string) {
 }
 
 
-module.exports = { delete_element, get_axie_brief_list_query, get_axie_detail_query, set_egg_attributes, set_adult_attributes, create_failed_message, create_generic_message, create_generic_error }
+module.exports = { delete_element, get_axie_brief_list_query, get_axie_detail_query, set_egg_attributes, set_adult_attributes, compute_purity, create_failed_message, create_generic_message, create_generic_error }
