@@ -25,9 +25,11 @@ for (const file of command_files) {
 
 // When client is ready, start checking for cached search queries
 client.once('ready', () => {
+	console.log('Axie Finder is ready.')
 
 	// Declare asynchronous function that will check for cached search queries
 	const check_for_queries = async () => {
+		// console.log(scheduled_search)
 
 		// Iterate through search queries and attempt to perform search
 		for (const message of scheduled_search) {
@@ -42,6 +44,9 @@ client.once('ready', () => {
 				// Create channel from client
 				const channel = await guild.channels.cache.get(message.channel_id)
 				if (!channel) {
+					console.log('Channel cannot be found. Reminder records are about to be deleted.')
+					scheduled_search = scheduled_search.filter(item => item.channel_id !== message.channel_id)
+					console.log('Reminder record deletion is successful.')
 					continue
 				}
 
@@ -49,7 +54,7 @@ client.once('ready', () => {
 				await scheduler.search_axie(message, channel)
 			}
 			catch (error) {
-				console.log('Failed to find channel.')
+				// console.log('Failed to find channel.')
 				try {
 					const channel = await client.users.fetch(message.user_id)
 
@@ -57,7 +62,7 @@ client.once('ready', () => {
 					await scheduler.search_axie(message, channel)
 				}
 				catch (error) {
-					console.log('Failed to find user.')
+					console.log('Failed to find channel.')
 				}
 			}
 			finally {
@@ -65,7 +70,7 @@ client.once('ready', () => {
 			}
 		}
 
-		// Pause for 6 hours
+		// Pause for reminder_interval minutes
 		setTimeout(check_for_queries, 60000 * reminder_interval)
 	}
 
