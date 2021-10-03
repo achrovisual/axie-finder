@@ -42,13 +42,14 @@ async function search_axie(query, channel) {
     else {
       const checker = async () => {
         if(await find_axie_details(response, query, channel)){
-          console.log('An Axie was found in scheduled search. Reminder record is about to be deleted.')
-          if(delete_element(scheduled_search, query)) {
-            console.log('Reminder record deletion is successful.')
-          }
-          else {
-            console.log('Reminder record is not found.')
-          }
+          console.log('An Axie was found in scheduled search.')
+          // console.log('An Axie was found in scheduled search. Reminder record is about to be deleted.')
+          // if(delete_element(scheduled_search, query)) {
+          //   console.log('Reminder record deletion is successful.')
+          // }
+          // else {
+          //   console.log('Reminder record is not found.')
+          // }
         }
         else {
           console.log('No Axie was found in scheduled search.')
