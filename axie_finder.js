@@ -49,6 +49,8 @@ async function search_axie(query, interaction) {
     }
     else {
       find_axie_details(response, query, interaction)
+      scheduled_search.push(query)
+      console.log('Reminder has been scheduled.')
     }
   }).catch(error => {
     console.log('An error occured while attempting search.')
@@ -176,11 +178,10 @@ async function find_axie_details(data, query, interaction) {
 
   try {
     if(!flag) {
-      scheduled_search.push(query)
-      console.log('Reminder has been scheduled.')
+      // scheduled_search.push(query)
+      // console.log('Reminder has been scheduled.')
       interaction.editReply({ embeds: [create_failed_message()] })
     }
-
   }
   catch(error) {
     console.log('Failed to send message.')
