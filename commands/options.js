@@ -11,7 +11,7 @@ module.exports = {
 	.addIntegerOption(option =>
 		option
 		.setName('interval')
-		.setDescription('Interval of when the reminders will be sent. Input an interval in minutes.')
+		.setDescription('Interval of when the reminders will be sent. Input an interval in seconds.')
 		.setRequired(true)),
 	async execute(interaction) {
 		await interaction.deferReply();
@@ -20,7 +20,7 @@ module.exports = {
 				reminder_interval = interaction.options.getInteger('interval')
 				// clearTimeout(timeout)
 				console.log('Reminder interval has been changed.')
-				interaction.editReply({ embeds: [create_generic_message('Reminder interval has been set to ' + reminder_interval + (reminder_interval > 1 ? ' minutes.' : ' minute.'))] })
+				interaction.editReply({ embeds: [create_generic_message('Reminder interval has been set to ' + reminder_interval + (reminder_interval > 1 ? ' seconds.' : ' seconds.'))] })
 			}
 			catch(error) {
 				console.log('An error occured while sending a reply.')
@@ -28,7 +28,7 @@ module.exports = {
 		}
 		else {
 			try {
-				interaction.editReply({ embeds: [create_generic_error('Interval cannot be less than 1 minute. Try again.')] })
+				interaction.editReply({ embeds: [create_generic_error('Interval cannot be less than 1 second. Try again.')] })
 			}
 			catch(error) {
 				console.log('An error occured while sending a reply.')
