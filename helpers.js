@@ -55,7 +55,7 @@ function set_adult_attributes(character) {
     { name: 'Stage', value: character.stage == 1 ? 'Egg' : 'Adult', inline: true},
     { name: 'Breed Count', value: character.breed_count, inline: true},
     // { name: 'Pureness', value: character.pureness, inline: true},
-    { name: 'Purity', value: compute_purity({eyes: character.eyes, ears: character.ears, horn: character.horn, mouth: character.mouth, back: character.back, tail: character.tail}, character.class) + "%", inline: true},
+    { name: 'Pureness', value: character.pureness + ' | ' + compute_purity({eyes: character.eyes, ears: character.ears, horn: character.horn, mouth: character.mouth, back: character.back, tail: character.tail}, character.class) + "%", inline: true},
     { name: 'Mystic', value: character.mystic, inline: true},
     { name: 'HP', value: character.hp, inline: true},
     { name: 'Speed', value: character.speed, inline: true},
