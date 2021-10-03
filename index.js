@@ -71,7 +71,7 @@ client.once('ready', () => {
 		}
 
 		// Pause for reminder_interval minutes
-		setTimeout(check_for_queries, 60000 * reminder_interval)
+		setTimeout(check_for_queries, 1000 * reminder_interval)
 	}
 
 	// Start checking for queries
