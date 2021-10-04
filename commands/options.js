@@ -25,7 +25,7 @@ module.exports = {
 					reminder_interval = interaction.options.getInteger('interval')
 					// clearTimeout(timeout)
 					console.log('Reminder interval has been changed.')
-					interaction.editReply({ embeds: [create_generic_message('Reminder interval has been set to ' + reminder_interval + (reminder_interval > 1 ? ' second.' : ' second.'))] })
+					interaction.editReply({ embeds: [create_generic_message('Reminder interval has been set to ' + reminder_interval + (reminder_interval > 1 ? ' seconds.' : ' second.'))] })
 				}
 				catch(error) {
 					console.log('An error occured while sending a reply.')
