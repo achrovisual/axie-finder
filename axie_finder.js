@@ -29,7 +29,7 @@ async function search_axie(query, interaction) {
           stages: query.stage
         },
         from: 0,
-        size: 24,
+        size: 128,
         sort: "PriceAsc",
         owner: null
       }
