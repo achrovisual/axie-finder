@@ -13,6 +13,7 @@ client.commands = new Collection();
 global.scheduled_search = []
 global.target_channel = null
 global.reminder_interval = 15
+global.search_size = 128
 // global.timeout
 
 const command_files = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
