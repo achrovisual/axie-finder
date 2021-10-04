@@ -45,7 +45,7 @@ module.exports = {
 				try {
 					search_size = interaction.options.getInteger('size')
 					// clearTimeout(timeout)
-					console.log('Reminder interval has been changed.')
+					console.log('Search size has been changed.')
 					interaction.editReply({ embeds: [create_generic_message('Search size has been set to ' + search_size + '.')] })
 				}
 				catch(error) {
