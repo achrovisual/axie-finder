@@ -43,7 +43,7 @@ module.exports = {
 		else if(interaction.options.getInteger('size') != null) {
 			if(interaction.options.getInteger('size') >= 1) {
 				try {
-					reminder_interval = interaction.options.getInteger('interval')
+					search_size = interaction.options.getInteger('size')
 					// clearTimeout(timeout)
 					console.log('Reminder interval has been changed.')
 					interaction.editReply({ embeds: [create_generic_message('Search size has been set to ' + search_size + '.')] })
@@ -54,7 +54,7 @@ module.exports = {
 			}
 			else {
 				try {
-					interaction.editReply({ embeds: [create_generic_error('Search size cannot be less than 1 second. Try again.')] })
+					interaction.editReply({ embeds: [create_generic_error('Search size cannot be less than 1. Try again.')] })
 				}
 				catch(error) {
 					console.log('An error occured while sending a reply.')
