@@ -12,12 +12,10 @@ module.exports = {
 		option
 		.setName('interval')
 		.setDescription('Interval of when the reminders will be sent. Input an interval in seconds.')
-		.setRequired(true))
 	.addIntegerOption(option =>
 		option
 		.setName('size')
-		.setDescription('Size of the search result.')
-		.setRequired(true)),
+		.setDescription('Size of the search result.'),
 	async execute(interaction) {
 		await interaction.deferReply();
 
