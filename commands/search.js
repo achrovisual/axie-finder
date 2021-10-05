@@ -22,7 +22,7 @@ module.exports = {
 		.addChoice('reptile', 'Reptile')
 		.addChoice('mech', 'Mech')
 		.addChoice('dawn', 'Dawn')
-		.addChoice('dusk', 'Dawn'))
+		.addChoice('dusk', 'Dusk'))
 	.addIntegerOption(option =>
 		option
 		.setName('stage')
